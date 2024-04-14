@@ -1,0 +1,28 @@
+PROGRAM Part5;
+VAR
+number, int     : INTEGER;
+a, b, c, x : INTEGER;
+y          : REAL;
+arr        : ARRAY [2..10] OF INTEGER;
+dyn_arr    : ARRAY OF INTEGER;
+
+BEGIN {Part4}
+    BEGIN
+        number := 2;
+        int := 5.5; {LET'S DO SMTH}
+        a := number;
+        setlength(dyn_arr, 5);
+        b := 10 * a + 10 * number DIV 4;
+        c := a - b;
+        arr[2] := 3; // single line comment
+        arr[2] := arr[2] + 3;
+        arr[3] := 3;
+        writeln("Array val 2: ",  arr[2], " Array val 3: " ,arr[3]);
+        repeat
+        BEGIN
+            b := b + 1;
+            writeln(b);
+        END
+        until (b > 35);
+    END;
+END.  {Part5}
