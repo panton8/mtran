@@ -1,27 +1,38 @@
-import requests
+import os
+import subprocess
 
-url = "https://api.jdoodle.com/v1/execute"
-api_key = "50251df3dcc83cc57d797c5cd6781213"
-lang = "pascal"
+def process(program):
+    fpc_path = "/usr/bin/fpc"
+    pascal_file = "/home/panton8/A.pas"
 
+    with open(pascal_file, 'w') as file:
+        a = file.read()
+        print(a)
 
-def process(file_name):
-    with open(file_name) as file:
-        code = file.read()
+    with open(pascal_file, 'w') as file:
+        file.write(program)
 
-    payload = {
-        "clientId": "50251df3dcc83cc57d797c5cd6781213",
-        "clientSecret": "f1b5d5f71de751a97e9ed5bc1063db1fd9c87eb1f11d703bc902f04f65d03c34",
-        "script": code,
-        "language": lang
-    }
+    compile_command = [fpc_path, pascal_file]
 
-    headers = {"Content-Type": "application/json"}
+    # Выполнение компиляции
+    process_compile = subprocess.Popen(compile_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output_compile, error_compile = process_compile.communicate()
 
-    response = requests.post(url, json=payload, headers=headers)
+    # Вывод результатов компиляции
+    if process_compile.returncode == 0:
+        compiled_program = pascal_file.replace(".pas", "")
+        compiled_program_exe = compiled_program + ".out"  # добавляем расширение исполняемого файла
 
-    if response.status_code == 200:
-        print(response.text)
+        # Выполнение скомпилированной программы
+        if os.path.exists(compiled_program_exe):
+            process_execute = subprocess.Popen([compiled_program_exe], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output_execute, error_execute = process_execute.communicate()
+
+            # Вывод результата выполнения программы
+            print("Результат выполнения программы:")
+            print(output_execute.decode("utf-8"))
+        else:
+            print("Ошибка выполнения: исполняемый файл не найден.")
     else:
-        print(f"Status code: {response.status_code}")
-        print("Error!")
+        print("Ошибка компиляции:")
+        print(error_compile.decode("utf-8"))

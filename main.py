@@ -1,4 +1,5 @@
 from SPI import build
+from Process import process
 import os
 import logging
 
@@ -10,7 +11,8 @@ def main():
     if os.path.isfile(path):
         with open(path) as f:
             program = f.read()
-            build(program)
+            process(program)
+            #build(program)
 
 
 if __name__ == '__main__':
