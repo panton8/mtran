@@ -19,3 +19,4 @@ def build(text):
 
     interpreter = Interpreter(tree)
     result = interpreter.interpret()
+    print(result)
